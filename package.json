@@ -1,6 +1,6 @@
 {
   "name": "ai-linter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A linter tool to analyze JavaScript, TypeScript, and Vue code, with a focus on AI-generated code, unused imports, alias resolution, and potential hazards.",
   "main": "index.js",
   "bin": {

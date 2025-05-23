@@ -423,4 +423,4 @@ Contributions are welcome! Please feel free to submit issues, feature requests, 
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE.md). (Note: You'll need to add a LICENSE.md file if you choose a specific license).
+This project is open-source and available under the [MIT License](LICENSE.md).
