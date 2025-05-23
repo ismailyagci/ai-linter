@@ -1,0 +1,16 @@
+{
+  "target": "src",
+  "recursive": true,
+  "extensions": [".js", ".jsx", ".ts", ".tsx"],
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".git/**",
+    "**/*.test.js",
+    "**/*.spec.js",
+    "coverage/**"
+  ],
+  "format": "summary",
+  "output": "analysis-report.txt"
+}

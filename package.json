@@ -1,0 +1,38 @@
+{
+  "name": "ai-linter",
+  "version": "1.0.2",
+  "description": "A linter tool to analyze JavaScript, TypeScript, and Vue code, with a focus on AI-generated code, unused imports, alias resolution, and potential hazards.",
+  "main": "index.js",
+  "bin": {
+    "ai-linter": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "lint": "node index.js ."
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "lint",
+    "linter",
+    "ai",
+    "code-analysis",
+    "static-analysis",
+    "javascript",
+    "typescript",
+    "vue",
+    "unused-imports",
+    "alias-resolver",
+    "code-quality"
+  ],
+  "author": "Your Name or Organization",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/parser": "^7.27.2",
+    "@babel/traverse": "^7.27.1",
+    "chalk": "^5.4.1",
+    "glob": "^11.0.2"
+  }
+}
