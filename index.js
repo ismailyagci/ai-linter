@@ -6,7 +6,7 @@ const CLI = require('./src/cli');
 if (require.main === module) {
   const cli = new CLI();
   cli.run().catch(error => {
-    console.error(chalk.red(`❌ Beklenmeyen hata: ${error.message}`));
+    console.error(chalk.red(`❌ Unexpected error: ${error.message}`));
     process.exit(1);
   });
 }

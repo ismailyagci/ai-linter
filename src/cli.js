@@ -14,20 +14,20 @@ class CLI {
 
   printUsage() {
     console.log(`
-${chalk.bold('Analyzer - Gelişmiş JavaScript/TypeScript Analiz Aracı')}
+${chalk.bold('Analyzer - Advanced JavaScript/TypeScript Analysis Tool')}
 
-Kullanım:
+Usage:
   node index.js <file|directory> [options]
 
-Seçenekler:
-  --recursive, -r      Alt dizinleri de tara (varsayılan: true, .analyzerconfig.json ile ayarlanabilir)
-  --extensions, -e     Dosya uzantıları (varsayılan: .js,.jsx,.ts,.tsx,.vue, .analyzerconfig.json ile ayarlanabilir)
-  --ignore, -i         Yoksayılacak pattern'ler (.analyzerconfig.json ile ayarlanabilir)
-  --format, -f         Çıktı formatı (json|table|summary) (varsayılan: table, .analyzerconfig.json ile ayarlanabilir)
-  --output, -o         Çıktı dosyası (.analyzerconfig.json ile ayarlanabilir)
-  --help, -h           Bu yardım mesajını göster
+Options:
+  --recursive, -r      Scan subdirectories (default: true, configurable via .analyzerconfig.json)
+  --extensions, -e     File extensions (default: .js,.jsx,.ts,.tsx,.vue, configurable via .analyzerconfig.json)
+  --ignore, -i         Patterns to ignore (configurable via .analyzerconfig.json)
+  --format, -f         Output format (json|table|summary) (default: table, configurable via .analyzerconfig.json)
+  --output, -o         Output file (configurable via .analyzerconfig.json)
+  --help, -h           Show this help message
 
-Örnekler:
+Examples:
   node index.js src/
   node index.js src/components/Button.jsx
   node index.js . --format json --output report.json
@@ -98,17 +98,17 @@ Seçenekler:
       const { totalFiles, filesWithErrors, filesWithWarnings, totalImports, unresolvedImports, unusedImports, totalCriticalCodeIssues, totalConsoleUsage, totalTodoFixmeComments } = result;
       
       return `
-${chalk.bold('📊 ANALIZ ÖZETI')}
+${chalk.bold('📊 ANALYSIS SUMMARY')}
 ${chalk.gray('─'.repeat(50))}
-📁 Toplam dosya: ${chalk.cyan(totalFiles)}
-❌ Hatalı dosya: ${chalk.red(filesWithErrors)}
-⚠️  Uyarılı dosya: ${chalk.yellow(filesWithWarnings)}
-📦 Toplam import: ${chalk.blue(totalImports)}
-🔍 Çözülemeyen import/re-export: ${chalk.red(unresolvedImports)} 
-🗑️  Kullanılmayan import: ${chalk.yellow(unusedImports)}
-🚫 Kritik kod problemi: ${chalk.red(totalCriticalCodeIssues || 0)}
-💻 Console kullanımı: ${chalk.yellow(totalConsoleUsage || 0)}
-📝 Toplam TODO/FIXME: ${chalk.magenta(totalTodoFixmeComments || 0)}
+📁 Total files: ${chalk.cyan(totalFiles)}
+❌ Files with errors: ${chalk.red(filesWithErrors)}
+⚠️  Files with warnings: ${chalk.yellow(filesWithWarnings)}
+📦 Total imports: ${chalk.blue(totalImports)}
+🔍 Unresolved imports/re-exports: ${chalk.red(unresolvedImports)} 
+🗑️  Unused imports: ${chalk.yellow(unusedImports)}
+🚫 Critical code issues: ${chalk.red(totalCriticalCodeIssues || 0)}
+💻 Console usage: ${chalk.yellow(totalConsoleUsage || 0)}
+📝 Total TODO/FIXME: ${chalk.magenta(totalTodoFixmeComments || 0)}
 
 ${this.getTopIssues(result.details)}
       `;
@@ -133,7 +133,9 @@ ${this.getTopIssues(result.details)}
     );
 
     if (problemFiles.length > 0) {
-      output += `\n${chalk.bold('🚨 PROBLEMLI DOSYALAR')}\n`;
+      output += `
+${chalk.bold('🚨 PROBLEMATIC FILES')}
+`;
       output += chalk.gray('─'.repeat(80)) + '\n';
       
       problemFiles.forEach(file => {
@@ -173,10 +175,10 @@ ${this.getTopIssues(result.details)}
 
   formatSingleFile(result) {
     const relativePath = path.relative(this.cwd, result.file);
-    let output = `\n${chalk.bold('📄 DOSYA ANALİZİ')}\n`;
+    let output = `\n${chalk.bold('📄 FILE ANALYSIS')}\n`;
     output += chalk.gray('─'.repeat(50)) + '\n';
-    output += `${chalk.cyan('Dosya:')} ${relativePath}\n`;
-    output += `${chalk.cyan('Durum:')} ${this.getStatusIcon(result.status)} ${result.status.toUpperCase()}\n`;
+    output += `${chalk.cyan('File:')} ${relativePath}\n`;
+    output += `${chalk.cyan('Status:')} ${this.getStatusIcon(result.status)} ${result.status.toUpperCase()}\n`;
 
     if (result.syntaxError && result.status === 'error') {
       output += `\n${chalk.red('❌ SYNTAX ERROR')}\n`;
@@ -309,22 +311,22 @@ ${this.getTopIssues(result.details)}
 
     if (issueFiles.length === 0 && !details.some(d => d.status === 'error' || (d.status === 'warning' && d.issues.some(iss => criticalIssueTypes.includes(iss.type) || iss.type === 'unused-imports')))) {
       if (!details.some(d => d.issues?.some(iss => iss.type === 'todo-comment' || iss.type === 'fixme-comment' || iss.type === 'console-usage'))) {
-        return chalk.green('🎉 Hiçbir problem bulunamadı!');
+        return chalk.green('🎉 No problems found!');
       }
-      return chalk.yellow('🔍 Sadece TODO/FIXME yorumları veya console kullanımları bulundu. Kritik bir problem yok.');
+      return chalk.yellow('🔍 Only TODO/FIXME comments or console usage found. No critical problems.');
     }
     if (issueFiles.length === 0 && (details.some(d => d.status === 'error' || d.status === 'warning'))) {
-      return chalk.yellow('🔍 Detaylı problem listesi için dosya bazlı analize bakınız.');
+      return chalk.yellow('🔍 See file-based analysis for a detailed list of problems.');
     }
 
 
-    let output = `${chalk.bold('🔍 EN ÇOK KRİTİK PROBLEM OLAN DOSYALAR')}\n`;
+    let output = `${chalk.bold('🔍 FILES WITH THE MOST CRITICAL PROBLEMS')}\n`;
     output += chalk.gray('─'.repeat(50)) + '\n';
     
     issueFiles.forEach((file, index) => {
       const relativePath = path.relative(this.cwd, file.file);
       const problemCount = file.issues.filter(i => criticalIssueTypes.includes(i.type)).length;
-      output += `${index + 1}. ${chalk.cyan(relativePath)} (${this.getStatusIcon(file.status)} ${problemCount} kritik problem)\n`;
+      output += `${index + 1}. ${chalk.cyan(relativePath)} (${this.getStatusIcon(file.status)} ${problemCount} critical problems)\n`;
     });
 
     return output;
@@ -341,7 +343,7 @@ ${this.getTopIssues(result.details)}
     const options = this.parseArgs(args);
     
     if (!options.target && !this.fileConfig.target) {
-      console.error(chalk.red('❌ Hedef dosya veya dizin belirtilmedi! (.analyzerconfig.json veya CLI argümanı olarak)'));
+      console.error(chalk.red('❌ Target file or directory not specified! (as .analyzerconfig.json or CLI argument)'));
       this.printUsage();
       process.exit(1);
     }
@@ -354,7 +356,7 @@ ${this.getTopIssues(result.details)}
       const targetPath = path.resolve(this.cwd, options.target);
       
       if (!fs.existsSync(targetPath)) {
-        console.error(chalk.red(`❌ Dosya veya dizin bulunamadı: ${targetPath}`));
+        console.error(chalk.red(`❌ File or directory not found: ${targetPath}`));
         process.exit(1);
       }
 
@@ -369,13 +371,13 @@ ${this.getTopIssues(result.details)}
       if (options.output) {
         const outputPath = path.isAbsolute(options.output) ? options.output : path.resolve(this.cwd, options.output);
         fs.writeFileSync(outputPath, output);
-        console.log(chalk.green(`✅ Sonuçlar şuraya kaydedildi: ${outputPath}`));
+        console.log(chalk.green(`✅ Results saved to: ${outputPath}`));
       } else {
         console.log(output);
       }
 
     } catch (error) {
-      console.error(chalk.red(`❌ Hata: ${error.message}`));
+      console.error(chalk.red(`❌ Error: ${error.message}`));
       console.error(error.stack);
       process.exit(1);
     }
