@@ -1,20 +1,11 @@
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
-
-const knownGlobals = new Set([
-  'console', 'Math', 'JSON', 'Date', 'RegExp', 'Array', 'Object', 'String', 'Number', 'Boolean', 'Function', 'Symbol', 'Error',
-  'Promise', 'Set', 'Map', 'WeakSet', 'WeakMap', 'parseInt', 'parseFloat', 'isNaN', 'isFinite',
-  'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'eval', 'undefined', 'Infinity', 'NaN',
-  'process', 'require', 'module', 'exports', '__filename', '__dirname', 'global', 'Buffer',
-  'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval', 'setImmediate', 'clearImmediate',
-  'window', 'document', 'navigator', 'localStorage', 'sessionStorage', 'fetch', 'XMLHttpRequest',
-  'alert', 'confirm', 'prompt', 'location', 'history', 'screen', 'Image', 'Audio', 'ActiveXObject'
-]);
+const globals = require('./globals');
 
 const consoleMethods = new Set(['log', 'warn', 'error', 'info', 'debug', 'table', 'dir', 'assert', 'count', 'time', 'timeEnd', 'trace']);
 
 function isGlobalOrCommonBuiltIn(name) {
-  return knownGlobals.has(name);
+  return globals.has(name);
 }
 
 class AstDataExtractor {
