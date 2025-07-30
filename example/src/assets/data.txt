@@ -1,0 +1,2 @@
+This is a text file with some content.
+It can be imported by JavaScript files.

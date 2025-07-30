@@ -32,6 +32,14 @@ class ImportResolver {
         resolvedImports.push({ ...imp, resolvedPath: resolvedPathString, status: 'resolved', isExternal: true });
         continue;
       }
+
+      const supportedJSExtensions = ['.js', '.jsx', '.ts', '.tsx', '.vue'];
+      const fileExtension = path.extname(resolvedPathString);
+      
+      if (!supportedJSExtensions.includes(fileExtension)) {
+        resolvedImports.push({ ...imp, resolvedPath: resolvedPathString, status: 'resolved', isExternal: true });
+        continue;
+      }
       
       const importedFileParseResult = this.fileParser(resolvedPathString);
 

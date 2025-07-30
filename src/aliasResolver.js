@@ -171,18 +171,20 @@ class AliasResolver {
       return basePath;
     }
 
-    for (const ext of extensions) {
-      const withExt = basePath + ext;
-      if (fs.existsSync(withExt)) {
-        return withExt;
-      }
-    }
-
-    if (fs.existsSync(basePath) && fs.statSync(basePath).isDirectory()) {
+    if (!path.extname(basePath)) {
       for (const ext of extensions) {
-        const indexFile = path.join(basePath, `index${ext}`);
-        if (fs.existsSync(indexFile)) {
-          return indexFile;
+        const withExt = basePath + ext;
+        if (fs.existsSync(withExt)) {
+          return withExt;
+        }
+      }
+
+      if (fs.existsSync(basePath) && fs.statSync(basePath).isDirectory()) {
+        for (const ext of extensions) {
+          const indexFile = path.join(basePath, `index${ext}`);
+          if (fs.existsSync(indexFile)) {
+            return indexFile;
+          }
         }
       }
     }

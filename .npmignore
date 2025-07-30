@@ -1,0 +1,16 @@
+node_modules/
+example/
+test-runner.js
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+dist/
+build/
+.git/
+.vscode/
+.idea/
+*.test.js
+*.spec.js
+.app-builder/
+.claude/

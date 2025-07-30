@@ -1,6 +1,6 @@
 {
   "name": "ai-linter",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A linter tool to analyze JavaScript, TypeScript, and Vue code, with a focus on AI-generated code, unused imports, alias resolution, and potential hazards.",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "lint": "node index.js ."
+    "lint": "node index.js .",
+    "test": "node test-runner.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,7 @@
     "alias-resolver",
     "code-quality"
   ],
-  "author": "Your Name or Organization",
+  "author": "İsmail Yağcı",
   "license": "MIT",
   "dependencies": {
     "@babel/parser": "^7.27.2",
